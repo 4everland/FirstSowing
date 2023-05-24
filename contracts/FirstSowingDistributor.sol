@@ -3,12 +3,11 @@ pragma solidity ^0.8.0;
 
 import '@openzeppelin/contracts-upgradeable/token/ERC1155/IERC1155ReceiverUpgradeable.sol';
 import '@openzeppelin/contracts-upgradeable/utils/cryptography/MerkleProofUpgradeable.sol';
-// import '@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol';
-import '@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol';
+import '@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol';
 
 import './interfaces/IFirstSowing.sol';
 
-contract FirstSowingDistributor is IERC1155ReceiverUpgradeable, OwnableUpgradeable {
+contract FirstSowingDistributor is IERC1155ReceiverUpgradeable, Initializable {
 	IFirstSowing public token;
 	bytes32 public merkleRoot;
 
@@ -24,13 +23,8 @@ contract FirstSowingDistributor is IERC1155ReceiverUpgradeable, OwnableUpgradeab
 
 	event BatchReceived(address operator, address from, uint256[] ids, uint256[] values, bytes data);
 
-	function initialize(IFirstSowing _token, bytes32 _merkleRoot, address owner) external initializer {
+	function initialize(IFirstSowing _token, bytes32 _merkleRoot) external initializer {
 		_setToken(_token);
-		_setMerkleRoot(_merkleRoot);
-		_transferOwnership(owner);
-	}
-
-	function updateRoot(bytes32 _merkleRoot) external onlyOwner {
 		_setMerkleRoot(_merkleRoot);
 	}
 
